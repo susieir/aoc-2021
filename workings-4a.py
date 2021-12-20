@@ -14,22 +14,30 @@ def format_board(board):
         board_formatted.append([n for n in row.split() if n.isdigit()])
     return board_formatted
 
-# Read file and store data
-with open(input_path, 'r') as fp:
-    data = fp.read()
-# Initialise list of boards
-board_list = []
-# Count number of double line breaks
-board_range = data.count("\n\n")
-for i in range(board_range + 1):
-    # Skip first section of data (numbers)
-    if i == 0:
-        i += 1
-        next
-    # Capture bingo board and append to board list
-    else:
-        board = data.split("\n\n")[i]
-        board_list.append(format_board(board))
-        i += 1
-print(board_list)
+
+def store_boards(input_path):
+    """
+    Takes input file and reads boards, 
+    formats board into list of lists
+    returns nested list of lists of boards
+    """
+    # Read file and store data
+    with open(input_path, 'r') as fp:
+        data = fp.read()
+    # Initialise list of boards
+    board_list = []
+    # Count number of double line breaks
+    board_range = data.count("\n\n")
+    # Iterate through all boards
+    for i in range(board_range + 1):
+        # Skip first section of data (numbers)
+        if i == 0:
+            i += 1
+            next
+        # Capture bingo board, foramt and append to board list
+        else:
+            board = data.split("\n\n")[i]
+            board_list.append(format_board(board))
+            i += 1
+    return board_list
 

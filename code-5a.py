@@ -25,8 +25,7 @@ def read_input(input_path):
             max_y = y1
         if y2 > max_y:
             max_y = y2
-        if x1 == x2 or y1 == y2:
-            coord_list.append([x1, y1, x2, y2])
+        coord_list.append([x1, y1, x2, y2])
     return coord_list, max_x, max_y
 
 # Create grid
@@ -43,6 +42,16 @@ def calc_points(x1, y1, x2, y2):
         return([(x1, i) for i in range(min(y1, y2), max(y1, y2) + 1)])
     elif y1 == y2:
         return([(j, y1) for j in range(min(x1, x2), max(x1, x2) + 1)])
+    else:
+        if x1 < x2:
+            x_s = [x for x in range(x1, x2 + 1)]
+        elif x1 > x2:
+            x_s = [x for x in range(x1, x2 - 1, -1)]
+        if y1 < y2:
+            y_s = [y for y in range(y1, y2 + 1)]
+        elif y1 > y2:
+            y_s = [x for x in range(y1, y2 - 1, -1)]
+        return(list(zip(x_s, y_s)))
 
 def increment_point(grid, y, x):
     """Increments grid by given point (x, y)"""
@@ -65,19 +74,13 @@ def main(input_path):
     # For each pair of coords calculate points covered
     for i in range(len(coord_list)):
         x1, y1, x2, y2 = [coord for coord in coord_list[i]]
+        #print(x1, y1, x2, y2)
         points = calc_points(x1, y1, x2, y2)
+        #print(points)
         for point in points:
             increment_point(grid, point[1], point[0])
     # Count points where 2+ lines overlap
     score = output_gtr_2_crossings(grid)
     return score
 
-
 print(main('input-5.csv'))
-
-"""
-coord_list, max_x, max_y = read_input('input-5.csv')
-grid = create_grid(max_x, max_y)
-for row in grid:
-    print(row)
-"""
